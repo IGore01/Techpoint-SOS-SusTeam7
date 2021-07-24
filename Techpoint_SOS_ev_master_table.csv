@@ -1,0 +1,4 @@
+ev_battery_id,cathode_comp,ev_BOL_voltage,ev_BOL_resist
+123456,LCO,12.00000,0.00100
+512325,NMC,12.50000,0.00100
+967557,LNCA,13.00000,0.00200
