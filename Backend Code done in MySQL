@@ -1,0 +1,37 @@
+Here are the functions created using MySQL to allow the backend to function. 
+Note: we were not able to find a better way to share our code other than to copy and paste it here.
+
+
+/*
+* Function that outputs the cathode_composition according to the ev_master table, given battery_id.
+*/
+CREATE DEFINER=`admin`@`%` PROCEDURE `get_cathode_comp`(battery_id varchar(100))
+BEGIN
+  SELECT ev_cathode_comp FROM ev_master WHERE battery_id = ev_battery_id;
+END
+
+
+/*
+* Function that calculates the SOS_impedence of a given battery_id, given the measured current, and the known beginning of 
+* life voltage / internal resistance from the ev_master table.
+*/
+CREATE DEFINER=`admin`@`%` PROCEDURE `get_SOS_impedence`(atm_current DECIMAL, battery_id INT)
+BEGIN
+  SELECT (atm_current) / (ev_BOL_voltage / ev_BOL_resist) FROM ev_master
+  WHERE battery_id = ev_battery_id;
+END
+
+
+/*
+* Function that checks if the given username/password combination is valid according to the ev_users_pass table.
+*/
+CREATE DEFINER=`admin`@`%` PROCEDURE `validate_user_pass_combo`(username VARCHAR(100), pass VARCHAR(100))
+BEGIN
+  SET @valid = FALSE;
+  IF EXISTS (
+	  SELECT 1 FROM ev_master WHERE username = ev_usernames AND pass = ev_passwords
+  ) THEN 
+	  SET @valid = TRUE;
+  END IF;
+  SELECT @valid AS RETURN_DATA;
+END
